@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 use DataTables;
+use App\Mail\DeletePostMail;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Mail;
+// use SebastianBergmann\Environment\Console;
 
 class PostController extends Controller
 {
@@ -15,6 +18,11 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+    {
+        return view('post.index');
+    }
+
+    public function dataTable()
     {
 
         $posts = Post::select(['id', 'title', 'description', 'created_at', 'updated_at']);
@@ -34,10 +42,6 @@ class PostController extends Controller
             })
             ->make(true);
 
-
-
-
-
         // return Datatables::of(Post::query())->make(true);
     }
 
@@ -48,7 +52,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post');
+        return view('post.create');
     }
 
     /**
@@ -59,7 +63,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required|max:255',
+            
+        ]);
+        $post = Post::create($validatedData);
+   
+        return redirect('/post')->with('success', 'Post is successfully saved');
     }
 
     /**
@@ -81,7 +92,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -93,7 +106,14 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required|max:255'
+            
+        ]);
+        Post::whereId($id)->update($validatedData);
+   
+        return redirect('/post')->with('success', 'Post is successfully Updated');
     }
 
     /**
@@ -104,6 +124,20 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // dd($id);
+        Post::findOrFail($id)->delete();
+
+        return redirect('/post')->with('success', 'Post is successfully delete');
     }
+    public function sendMail(){
+        $post = [
+            'title' => 'Mail from mail testing',
+            'body' => 'This is for testing email using smtp'
+        ];
+       
+        Mail::to('raxit@logisticinfotech.co.in')->queue(new DeletePostMail($post));
+       
+        // dd("Email is Sent.");
+    }
+    
 }

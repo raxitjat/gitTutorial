@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+// use App\Post;
+// use App\Observers\PostObserver;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // \App\Post::creating(function($model){
+        //     $model->title = strtoupper($model->title);
+        // });
+        // Post::observe(PostObserver::class);
+
     }
 }

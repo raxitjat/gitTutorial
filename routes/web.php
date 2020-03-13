@@ -22,6 +22,22 @@ Auth::routes();
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('post','PostController');
-// Route::get('/post', 'PostController@index');
-// Route::get('/postcreate', 'PostController@create')->name('post');
+Route::middleware('auth')->group(function(){
+
+    Route::get('post/dataTable', 'PostController@dataTable');
+    Route::resource('post','PostController');
+});
+
+Route::get('send-mail','PostController@sendMail')->name('sendMail');
+// Route::get('send-mail', function () {
+   
+//     $details = [
+//         'title' => 'Mail from mail testing',
+//         'body' => 'This is for testing email using smtp'
+//     ];
+   
+//     Mail::to('raxit@logisticinfotech.co.in')->send(new \App\Mail\DeletePostMail($details));
+   
+//     dd("Email is Sent.");
+// });
+
