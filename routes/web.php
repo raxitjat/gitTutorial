@@ -24,11 +24,13 @@ Auth::routes(['verify' => true]);
 Route::get('/home', 'HomeController@index')->name('home');
 Route::middleware('auth')->group(function(){
 
-    Route::get('post/dataTable', 'PostController@dataTable');
+    Route::get('post/dataTable', 'PostController@dataTable')->name('postDatatable');
     Route::resource('post','PostController');
 });
 
 Route::get('send-mail','PostController@sendMail')->name('sendMail');
+// Route::get('image-upload', 'ImageUploadController@imageUpload')->name('image.upload');
+// Route::post('image-upload', 'ImageUploadController@imageUploadPost')->name('image.upload.post');
 // Route::get('send-mail', function () {
    
 //     $details = [

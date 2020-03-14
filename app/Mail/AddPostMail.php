@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Mail;
-use App\Post;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Post;
 
-class DeletePostMail extends Mailable
+class AddPostMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $post;
@@ -20,7 +20,7 @@ class DeletePostMail extends Mailable
     public function __construct($post)
     {
         $this->post = $post;
-
+        
     }
 
     /**
@@ -30,8 +30,7 @@ class DeletePostMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('delete post update')
-        ->view('emails.deletePostMail');
-        
+        return $this->subject('You Add New Post')
+        ->view('emails.addPostMail');
     }
 }

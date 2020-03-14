@@ -66,11 +66,13 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required|max:255',
-            
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        $imageName = time().'.'.$request->image->extension(); 
+        $request->image->move(public_path('images'), $imageName);
         $post = Post::create($validatedData);
    
-        return redirect('/post')->with('success', 'Post is successfully saved');
+        return redirect('/post')->with('success', 'Post is successfully saved')->with('image',$imageName);
     }
 
     /**
@@ -113,7 +115,7 @@ class PostController extends Controller
         ]);
         Post::whereId($id)->update($validatedData);
    
-        return redirect('/post')->with('success', 'Post is successfully Updated');
+        return redirect('/post')->with('success', 'Post ('.$id.') is successfully Updated');
     }
 
     /**
@@ -124,7 +126,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        // dd($id);
+        
         Post::findOrFail($id)->delete();
 
         return redirect('/post')->with('success', 'Post is successfully delete');

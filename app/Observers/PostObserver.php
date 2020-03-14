@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Post;
 use App\Mail\DeletePostMail;
+use App\Mail\AddPostMail;
 // use 
 
 class PostObserver
@@ -18,13 +19,22 @@ class PostObserver
     {
         $post->title = strtoupper($post->title);
 
+
     }
 
     public function created(Post $post)
     {
         // $post->title=strtoupper($post->title);
+        $this->sendMailableAdd($post,AddPostMail::class);
+
         
             // $post->title = strtoupper($post->title);
+
+    }
+
+    public function updating(Post $post)
+    {
+        // $post->title = strtoupper($post->title);
 
     }
 
@@ -36,7 +46,8 @@ class PostObserver
      */
     public function updated(Post $post)
     {
-        //
+        // $post->title = strtoupper($post->title);
+        
     }
 
     /**
@@ -55,7 +66,7 @@ class PostObserver
     }
     public function deleting(Post $post)
     {
-        $this->sendMailable($post,DeletePostMail::class);
+        $this->sendMailableDelete($post,DeletePostMail::class);
     }
 
     /**
@@ -80,12 +91,22 @@ class PostObserver
         //
     }
 
-    private function sendMailable(Post $post)
+    private function sendMailableDelete(Post $post)
     {
     //     $teacher = User::findOrFail($classroom->teacher_id)->first();
     //     $student = User::findOrFail($classroom->student_id)->first();
 
     \Mail::to('raxit@logisticinfotech.co.in')->queue(new DeletePostMail($post));
+
+
+        
+    }
+    private function sendMailableAdd(Post $post)
+    {
+    //     $teacher = User::findOrFail($classroom->teacher_id)->first();
+    //     $student = User::findOrFail($classroom->student_id)->first();
+
+    \Mail::to('raxit@logisticinfotech.co.in')->queue(new AddPostMail($post));
 
 
         

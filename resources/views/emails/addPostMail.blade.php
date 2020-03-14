@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Delete Post</title>
+    <title>You add Post Successfully</title>
 </head>
 <body>
     <h1>{{ $post['title'] }}</h1>
