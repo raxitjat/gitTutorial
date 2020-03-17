@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use DataTables;
 use App\Mail\DeletePostMail;
 use Carbon\Carbon;
@@ -8,6 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StorePostValidation;
 // use SebastianBergmann\Environment\Console;
 
 class PostController extends Controller
@@ -25,7 +28,7 @@ class PostController extends Controller
     public function dataTable()
     {
 
-        $posts = Post::select(['id', 'title', 'description', 'created_at', 'updated_at']);
+        $posts = Post::select("*", "image as image_path");
 
         return Datatables::of($posts)
             ->editColumn('created_at', function ($post) {
@@ -61,18 +64,26 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostValidation $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        $imageName = time().'.'.$request->image->extension(); 
-        $request->image->move(public_path('images'), $imageName);
-        $post = Post::create($validatedData);
-   
-        return redirect('/post')->with('success', 'Post is successfully saved')->with('image',$imageName);
+        $post = new Post;
+        $post->title = $request->title;
+        $post->description = $request->description;
+        if ($imageFile = $request->file('image')) {
+
+            $imageName = time() . '.' . $request->image->extension();
+            $imagePath = $imageFile->store(config('custom.paths.postImage'));
+            Storage::disk('public')->put(config('custom.paths.postImage') . $imageName, file_get_contents($imageFile));
+
+
+            $post->image = $imageName;
+        }
+
+
+        $post->save();
+
+
+        return redirect('/post')->with('success', 'Post is successfully saved');
     }
 
     /**
@@ -108,14 +119,42 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required|max:255'
-            
-        ]);
-        Post::whereId($id)->update($validatedData);
-   
-        return redirect('/post')->with('success', 'Post ('.$id.') is successfully Updated');
+        $post = post::findOrFail($id);
+        $imageFile = $request->file('image');
+        $imageName = $post->image;
+
+        if ($imageFile != '') {
+            $validatedData = $request->validate([
+                'title' => 'required|max:255',
+                'description' => 'required|max:255',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            if (Storage::disk('public')->exists(config('custom.paths.postImage') . $post->image)) {
+                Storage::disk('public')->delete(config('custom.paths.postImage') . $post->image);
+
+            }
+
+            $imageName = time() . '.' . $request->image->extension();
+            $imagePath = $imageFile->store(config('custom.paths.postImage'));
+            Storage::disk('public')->put(config('custom.paths.postImage') . $imageName, file_get_contents($imageFile));
+
+
+        } else {
+            $validatedData = $request->validate([
+                'title' => 'required|max:255',
+                'description' => 'required|max:255',
+            ]);
+
+        }
+        $form_data = array(
+            'title' => $request->title,
+            'description' => $request->description,
+            'image' => $imageName
+        );
+        Post::whereId($id)->update($form_data);
+
+        return redirect('/post')->with('success', 'Post (' . $id . ') is successfully Updated');
     }
 
     /**
@@ -126,20 +165,11 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        
+
         Post::findOrFail($id)->delete();
 
         return redirect('/post')->with('success', 'Post is successfully delete');
     }
-    public function sendMail(){
-        $post = [
-            'title' => 'Mail from mail testing',
-            'body' => 'This is for testing email using smtp'
-        ];
-       
-        Mail::to('raxit@logisticinfotech.co.in')->queue(new DeletePostMail($post));
-       
-        // dd("Email is Sent.");
-    }
-    
+
+
 }

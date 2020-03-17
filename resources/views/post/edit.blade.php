@@ -1,10 +1,8 @@
 @extends('layouts.default')
-
 @section('content')
-
 <div class="card uper">
     <div class="card-header">
-        Update Shows
+        Edit new Post
     </div>
     <div class="card-body">
         @if ($errors->any())
@@ -16,20 +14,17 @@
             </ul>
         </div><br />
         @endif
-        <form method="post" action="{{ route('post.update', $post->id) }}">
-            <div class="form-group">
-                @csrf
-                @method('PATCH')
-                <label for="name">Post Title:</label>
-                <input type="text" class="form-control" name="title" value="{{ $post->title }}" />
-            </div>
-            <div class="form-group">
-                <label for="price">Post Description :</label>
-                <input type="text" class="form-control" name="description" value="{{ $post->description }}" />
-            </div>
 
-            <button type="submit" class="btn btn-primary">Update Post</button>
-        </form>
+
+        {!! Form::model($post, ['method' => 'PATCH','files'=>true, 'action' => ['PostController@update',$post->id]])
+        !!}
+        <img width="200px" height="200px" src="{{asset('storage/'.config('custom.paths.postImage').$post->image)}}" alt="" srcset="">
+        @include('post.form', ['submitButtonText' => 'Edit'])
+        {!! Form::close() !!}
+
+
+
+
     </div>
 </div>
 @endsection

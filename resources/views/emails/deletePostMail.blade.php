@@ -4,8 +4,8 @@
     <title>Delete Post</title>
 </head>
 <body>
-    <h1>{{ $post['title'] }}</h1>
-    <p>{{ $post['description'] }}</p>
+    <h1>Post Title:{{ $post['title'] }}</h1>
+    <p>Post description:{{ $post['description'] }}</p>
 
     <p>Thank you</p>
 </body>

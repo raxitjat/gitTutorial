@@ -11,5 +11,6 @@ $factory->define(Post::class, function (Faker $faker) {
     return [
         'title'=>$faker->unique()->name,
         'description'=>Str::random(50),
+        'image'=>'1584109262.png',
     ];
 });

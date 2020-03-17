@@ -14,24 +14,12 @@
             </ul>
         </div><br />
         @endif
-        <form method="post" action="{{ route('post.store') }}" enctype="multipart/form-data">
-            <div class="form-group">
-                @csrf
-                <label for="name">Title:</label>
-                <input type="text" class="form-control" name="title" />
-            </div>
-            <div class="form-group">
-                <label for="image">Image :</label>
-                <input type="file" name="image" class="form-control">
-                </div>
 
-            <div class="form-group">
-                <label for="price">Description :</label>
-                <input type="text" class="form-control" name="description" />
-            </div>
+        {!! Form::open(['action' => 'PostController@store','files' => true]) !!}
+        @include('post.form', ['submitButtonText' => 'Add New Post'])
+        {!! Form::close() !!}
 
-            <button type="submit" class="btn btn-primary">Add New Post </button>
-        </form>
+
     </div>
 </div>
 @endsection

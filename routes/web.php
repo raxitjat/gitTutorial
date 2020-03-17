@@ -29,17 +29,5 @@ Route::middleware('auth')->group(function(){
 });
 
 Route::get('send-mail','PostController@sendMail')->name('sendMail');
-// Route::get('image-upload', 'ImageUploadController@imageUpload')->name('image.upload');
-// Route::post('image-upload', 'ImageUploadController@imageUploadPost')->name('image.upload.post');
-// Route::get('send-mail', function () {
-   
-//     $details = [
-//         'title' => 'Mail from mail testing',
-//         'body' => 'This is for testing email using smtp'
-//     ];
-   
-//     Mail::to('raxit@logisticinfotech.co.in')->send(new \App\Mail\DeletePostMail($details));
-   
-//     dd("Email is Sent.");
-// });
+
 
