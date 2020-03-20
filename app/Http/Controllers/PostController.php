@@ -69,6 +69,7 @@ class PostController extends Controller
         $post = new Post;
         $post->title = $request->title;
         $post->description = $request->description;
+        $post->refrence = '123456';
         if ($imageFile = $request->file('image')) {
 
             $imageName = time() . '.' . $request->image->extension();
@@ -82,6 +83,7 @@ class PostController extends Controller
 
         $post->save();
 
+        // session()->set('success','Item created successfully.');
 
         return redirect('/post')->with('success', 'Post is successfully saved');
     }
@@ -145,6 +147,7 @@ class PostController extends Controller
                 'title' => 'required|max:255',
                 'description' => 'required|max:255',
             ]);
+            
 
         }
         $form_data = array(
@@ -170,6 +173,8 @@ class PostController extends Controller
 
         return redirect('/post')->with('success', 'Post is successfully delete');
     }
+
+    
 
 
 }

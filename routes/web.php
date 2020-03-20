@@ -31,3 +31,16 @@ Route::middleware('auth')->group(function(){
 Route::get('send-mail','PostController@sendMail')->name('sendMail');
 
 
+// Route::get('admin-panel',function(){
+//     return view('admin.layouts.default');
+// });
+Route::prefix('admin-panel')->group(function () {
+    Route::get('/', function () {
+    return view('admin.layouts.default');
+        
+    });
+    Route::get('/dashboard', function () {
+        return view('admin.user.demoData');
+            
+        });
+});

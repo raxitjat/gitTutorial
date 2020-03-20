@@ -5,7 +5,7 @@
 
     <h2>Laravel DataTables Task (yajara)</h2>
 
-@if(Session::has('success'))
+    @if(Session::has('success'))
         <div class="alert alert-success">
             {{ Session::get('success') }}
             @php
@@ -24,6 +24,7 @@
                 <th>Description</th>
                 <th>Created_at</th>
                 <th>Updated_at</th>
+                <th>Refrence</th>
                 <th>Edit</th>
                 {{-- <th>Delete</th> --}}
 
@@ -68,11 +69,10 @@
                         { data: 'description',width:'25%' },
                         { data: 'created_at',width:'10%' },
                         { data: 'updated_at',width:'10%'},
+                        { data: 'refrence',width:'10%'},
                         { data: null,
                             render: function (dataField) { 
-                                // console.log(dataField);
                                 var id = dataField.id;
-                                // alert(idData);
                                 var editData= '<a class="btn btn-info ml-1" href="{{route('post.edit',':id')}}"><i class="fa fa-edit"></i></a>';
                                 
                                  
@@ -114,6 +114,28 @@
             });
         });
     });
+    
+
+
+// @if(Session::has('success'))
+//         toastr.success("{{ Session::get('success') }}");
+// @endif
+
+
+// @if(Session::has('info'))
+//         toastr.info("{{ Session::get('info') }}");
+// @endif
+
+
+// @if(Session::has('warning'))
+//         toastr.warning("{{ Session::get('warning') }}");
+// @endif
+
+
+// @if(Session::has('error'))
+//         toastr.error("{{ Session::get('error') }}");
+// @endif
+
 
 
 </script>

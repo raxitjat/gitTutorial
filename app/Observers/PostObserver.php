@@ -6,6 +6,9 @@ use App\Post;
 use App\Mail\DeletePostMail;
 use App\Mail\AddPostMail;
 use Illuminate\Support\Facades\Storage;
+use App\Jobs\SendEmailJob;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 // use 
 
 class PostObserver
@@ -18,14 +21,19 @@ class PostObserver
      */
     public function creating(Post $post)
     {
-        $post->title = strtoupper($post->title);
+        $post->refrence=mt_rand(100000, 999999);
+
+        // $post->title = strtoupper($post->title);
 
 
     }
 
     public function created(Post $post)
     {
-        $this->sendMailableAdd($post, AddPostMail::class);
+        $post->refrence=mt_rand(100000, 999999);
+        // $post->save();
+        // $six_digit_random_number = mt_rand(100000, 999999);
+        // $this->sendMailableAdd($post, AddPostMail::class);
 
     }
 
@@ -74,7 +82,19 @@ class PostObserver
     }
     public function deleting(Post $post)
     {
-        $this->sendMailableDelete($post, DeletePostMail::class);
+        $details= 'raxit@logisticinfotech.co.in';
+        $mailData = [
+            "title" =>  $post->title,
+            "description" => $post->description ,
+         ];
+         
+
+        Mail::to($details)->queue(new DeletePostMail($mailData));
+        
+  
+    // dispatch(new SendEmailJob($details));
+     
+        // $this->sendMailableDelete($post, DeletePostMail::class);
     }
 
     /**

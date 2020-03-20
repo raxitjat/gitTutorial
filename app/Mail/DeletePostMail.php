@@ -30,8 +30,12 @@ class DeletePostMail extends Mailable
      */
     public function build()
     {
+        $viewData = [
+            'title' => $this->post['title'],
+            'description' => $this->post['description'],
+        ];
         return $this->subject('delete post update')
-        ->view('emails.deletePostMail');
+        ->view('emails.deletePostMail',$viewData);
         
     }
 }
