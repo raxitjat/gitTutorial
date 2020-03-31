@@ -7,7 +7,7 @@ use App\Mail\DeletePostMail;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
-use App\Post;
+use App\Models\Post;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StorePostValidation;

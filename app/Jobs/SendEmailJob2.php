@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\DeletePostMail;
-use App\Post;
+use App\Models\Post;
 
 use Illuminate\Mail\Mailer;
 

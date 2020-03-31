@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Mail;
-use App\Post;
+use App\Models\Post;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

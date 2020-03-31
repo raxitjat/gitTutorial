@@ -22,7 +22,7 @@ Auth::routes();
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::middleware('auth')->group(function(){
+Route::middleware('verified')->group(function(){
 
     Route::get('post/dataTable', 'PostController@dataTable')->name('postDatatable');
     Route::resource('post','PostController');

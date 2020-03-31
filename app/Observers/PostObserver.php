@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Post;
+use App\Models\Post;
 use App\Mail\DeletePostMail;
 use App\Mail\AddPostMail;
 use Illuminate\Support\Facades\Storage;

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 use App\DripEmailer;
-use App\User;
-use App\Post;
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Console\Command;
 use App\Mail\SendOfferMail;
 use Illuminate\Support\Facades\Mail;
